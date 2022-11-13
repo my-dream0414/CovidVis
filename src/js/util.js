@@ -1,6 +1,7 @@
 const bibUtil = (function () {
     return {
         parseField: function (fieldString, field, tagCategories) {
+            console.log("tagCategories:",tagCategories)
             function tagSort(a, b) {
                 var categoryA = a.substring(0, a.indexOf(':')).toLowerCase();
                 var categoryB = b.substring(0, b.indexOf(':')).toLowerCase();
@@ -26,15 +27,25 @@ const bibUtil = (function () {
             switch (field) {
                 case 'context':
                     var tags = [];
-                    const splitter = fieldString.indexOf(',') < 0?';':',';
-                    console.log(splitter)
+                    const splitter = fieldString.indexOf(',') < 0 ? ';' : ',';
+                    // console.log(splitter)
                     $.each(fieldString.split(splitter), function (i, tag) {
                         // toLowerCase()一个新的字符串，在其中 stringObject 的所有大写字符全部被转换为了小写字符。
                         // trim()函数用于去除字符串两端的空白字符
+                        // console.log(fieldString)
                         tag = $.trim(tag.split("//").join("")).toLowerCase();
-                        console.log(tag)
+                        tag1 = tag.split(':')
+                        // console.log(tag1[0])
+                        // console.log(tag1[1])
+
+                        if (tag1.length > 1) {
+                            tag2 = tag1[1].split('/')
+                            for (let index = 0; index < tag2.length; index++) {
+                                tags.push(tag1[0] + ":" + tag2[index])
+                            }
+                        }
                         // $.inArray()函数用于在数组中搜索指定的值,并返回其索引值。如果数组中不存在该值,则返回-1;
-                        if ($.inArray(tag, tags) == -1) {
+                        else if ($.inArray(tag, tags) == -1) {
                             tags.push(tag);
                         }
                     });
@@ -46,16 +57,45 @@ const bibUtil = (function () {
                     tags.sort(tagSort);
                     // console.log(tags)
                     return tags;
-                    case '图形类':
-                        return fieldString.split(',');
-                    case 'Data':
+                case '图形类':
+                    return fieldString.split(',');
+                case 'Data':
+                    var tags = [];
+                    const splitter1 = fieldString.indexOf(',') < 0 ? ';' : ',';
+                    // console.log(splitter1)
+                    $.each(fieldString.split(splitter1), function (i, tag) {
+                        // toLowerCase()一个新的字符串，在其中 stringObject 的所有大写字符全部被转换为了小写字符。
+                        // trim()函数用于去除字符串两端的空白字符
+                        // console.log(fieldString)
+                        tag = $.trim(tag.split("//").join("")).toLowerCase();
+                        tag1 = tag.split(':')
+                        // console.log(tag1[0])
+                        // console.log(tag1[1])
 
-                        return fieldString.split(',')
-                    case 'Vis_task':
-                        var fieldchar = []
-                        return fieldString.split(',')
-                    default :
-                        return [fieldString];
+                        if (tag1.length > 1) {
+                            tag2 = tag1[1].split('/')
+                            for (let index = 0; index < tag2.length; index++) {
+                                tags.push(tag1[0] + ":" + tag2[index])
+                            }
+                        }
+                        // $.inArray()函数用于在数组中搜索指定的值,并返回其索引值。如果数组中不存在该值,则返回-1;
+                        else if ($.inArray(tag, tags) == -1) {
+                            tags.push(tag);
+                        }
+                    });
+                    $.each(tagCategories, function (categoryName) {
+                        if (fieldString.indexOf(categoryName + ":") == -1) {
+                            tags.push(categoryName + ":?");
+                        }
+                    });
+                    tags.sort(tagSort);
+                    // console.log(tags)
+                    return tags;
+                case 'Vis_task':
+                    var fieldchar = []
+                    return fieldString.split(',')
+                default:
+                    return [fieldString];
             }
         }
     }
@@ -96,7 +136,7 @@ const tagUtil = (function () {
                 frequencyClass = 'freq120';
             }
             return frequencyClass;
-        }  
+        }
     }
 })();
 

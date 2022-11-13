@@ -62,11 +62,13 @@ const tags = (function () {
             });
         });
         var usedCategoryTags = [];
-        // console.log("bib.tagCategories:",bib.tagCategories)
+        console.log("bib.tagCategories:",bib.tagCategories)
+    
         // 将context的内容单独处理
         if (options.field === 'context') {
             $.each(bib.tagCategories, function (categoryName, category) {
-                // console.log("categoryName:",categoryName)  : type 
+                console.log("category:",category)
+                console.log("categoryName:",categoryName)  
                 // console.log("category:",category)   ； {description: 'type of the paper'}
                 var tagDivsCategory = [];
                 
@@ -87,6 +89,7 @@ const tags = (function () {
                         usedCategoryTags.push(tagID);
                     }
                 });
+                // console.log("categoryName:",categoryName)
                 appendTagDivs(categoryName, category['description'], tagDivsCategory, containerDiv);
             });
         }
@@ -96,6 +99,7 @@ const tags = (function () {
             if (usedCategoryTags.indexOf(tagID) < 0) {
                 if (options.field === 'context') {
                     bib.keywordFrequencies[tagID] = frequency;
+
                 }
                 // console.log("tag:",tag)
                 var tagDiv = createTag(tag, options, frequency, tagFrequencySelector);
@@ -104,6 +108,7 @@ const tags = (function () {
                 }
             }
         });
+        console.log("options.field:",options.field)
         appendTagDivs(options.field === 'context' ? 'other' : '', 'unclassified tags', tagDivs, containerDiv);
         filterTags(tagCloudDiv);
     }
@@ -113,6 +118,7 @@ const tags = (function () {
             bib.parsedEntries = {};
         }
         $.each(bib.entries, function (id, entry) {
+            // console.log("entry:",entry)
             if (!bib.parsedEntries[id]) {
                 bib.parsedEntries[id] = {};
             }
@@ -145,8 +151,8 @@ const tags = (function () {
             class: 'tag ' + frequencyClass,
             value: frequency
         });
-        console.log(tag.indexOf(":"))
-        console.log("tag.substring(tag.indexOf(':'):",tag.substring(tag.indexOf(":")+1).split('/'))
+        // console.log(tag.indexOf(":"))
+        // console.log("tag.substring(tag.indexOf(':'):",tag.substring(tag.indexOf(":")+1).split('/'))
         const tag_num = tag.substring(tag.indexOf(":")+1).split('/')
         if (tag_num.length>1){
             for(let i in tag_num){
@@ -225,7 +231,8 @@ const tags = (function () {
     }
 
     function appendTagDivs(name, title, tagDivs, element) {
-
+        console.log("element",element)
+        console.log("name:",name)
         tagDivs = tagDivs.sort(function (a, b) {
             var nA = parseInt(a.attr('value'));
             var nB = parseInt(b.attr('value'));

@@ -14,7 +14,8 @@ const bib = (function () {
         availablePdf: electron ? [] : availablePdf,
         availableImg: electron ? [] : availableImg,
         stopwords: userDefinedStopwords,
-        tagCategories: electron ? generateTagCategoriesFromcontext(entries) : userDefinedTagCategories,
+        // tagCategories: electron ? generateTagCategoriesFromcontext(entries) : userDefinedTagCategories,
+        tagCategories: generateTagCategoriesFromcontext(entries),
         authorizedTags: userDefinedAuthorizedTags,
         entryDivs: {},
         warnings: warnings.computeAllWarnings(entries),
@@ -354,9 +355,10 @@ const bib = (function () {
     function generateTagCategoriesFromcontext(entries) {
         const tagCategories = {};
         Object.keys(entries).forEach(id => {
-            bibUtil.parseField(entries[id].context, 'context', tagCategories).forEach(keyword => {
-                if (keyword.indexOf(':') > 0) {
-                    const category = keyword.split(':')[0];
+            // forEach()法对数组的每个元素执行一次提供的函数
+            bibUtil.parseField(entries[id].context, 'context', tagCategories).forEach(keyword1 => {
+                if (keyword1.indexOf(':') > 0) {
+                    const category = keyword1.split(':')[0];
                     if (!tagCategories[category]) {
                         tagCategories[category] = {};
                     }
