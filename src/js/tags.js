@@ -22,7 +22,7 @@ const tags = (function () {
     function updateTagCloud(options) {
         parseEntries(options);
         // 生成一个类别的div
-        console.log("options.field:",options.field)
+        // console.log("options.field:",options.field)
         var tagCloudID = 'tag_cloud_' + options.field;
         var tagCloudDiv = $('#' + tagCloudID);
         if (tagCloudDiv.length == 0) {
@@ -62,16 +62,17 @@ const tags = (function () {
             });
         });
         var usedCategoryTags = [];
-        console.log("bib.tagCategories:",bib.tagCategories)
-    
+        
+        // tagCategoriesData
         // 将context的内容单独处理
-        if (options.field === 'context') {
+        if (options.field === 'context' ) {
+            console.log("bib.tagCategories:",bib.tagCategories)
             $.each(bib.tagCategories, function (categoryName, category) {
-                console.log("category:",category)
-                console.log("categoryName:",categoryName)  
+                // console.log("category:",category)
+                // console.log("categoryName:",categoryName)  
                 // console.log("category:",category)   ； {description: 'type of the paper'}
                 var tagDivsCategory = [];
-                
+                // console.log("tagFrequency:",tagFrequency)
                 $.each(tagFrequency, function (tagID, frequency) {
                     // console.log("frequency",frequency)
                     // console.log("tagID:",tagID)
@@ -82,7 +83,36 @@ const tags = (function () {
                             bib.keywordFrequencies[tag] = frequency;
                         }
                         var tagDiv = createTag(tag, options, frequency, tagFrequencySelector);
-                        console.log("tagFrequencySelector:",tagFrequencySelector)
+                        // console.log("tagFrequencySelector:",tagFrequencySelector)
+                        if (tagDiv) {
+                            tagDivsCategory.push(tagDiv);
+                        }
+                        usedCategoryTags.push(tagID);
+                    }
+                });
+                // console.log("categoryName:",categoryName)
+                appendTagDivs(categoryName, category['description'], tagDivsCategory, containerDiv);
+            });
+        }
+        if (options.field === 'Data') {
+            console.log("bib.tagCategoriesData:",bib.tagCategoriesData)
+            $.each(bib.tagCategoriesData, function (categoryName, category) {
+                // console.log("category:",category)
+                // console.log("categoryName:",categoryName)  
+                // console.log("category:",category)   ； {description: 'type of the paper'}
+                var tagDivsCategory = [];
+                // console.log("tagFrequency:",tagFrequency)
+                $.each(tagFrequency, function (tagID, frequency) {
+                    // console.log("frequency",frequency)
+                    // console.log("tagID:",tagID)
+                    var tag = getTag(tagID, options.field);
+                    // lastindexof()用于在数组中查找元素，可返回指定元素值在数组中最后出现的位置（下标值）
+                    if (tag.lastIndexOf((categoryName + ":"), 0) == 0) {
+                        if (tag.indexOf('?') < 0) {
+                            bib.keywordFrequencies[tag] = frequency;
+                        }
+                        var tagDiv = createTag(tag, options, frequency, tagFrequencySelector);
+                        // console.log("tagFrequencySelector:",tagFrequencySelector)
                         if (tagDiv) {
                             tagDivsCategory.push(tagDiv);
                         }
@@ -97,9 +127,8 @@ const tags = (function () {
         $.each(tagFrequency, function (tagID, frequency) {
             var tag = getTag(tagID, options.field);
             if (usedCategoryTags.indexOf(tagID) < 0) {
-                if (options.field === 'context') {
+                if (options.field === 'context'|| options.field === 'Data') {
                     bib.keywordFrequencies[tagID] = frequency;
-
                 }
                 // console.log("tag:",tag)
                 var tagDiv = createTag(tag, options, frequency, tagFrequencySelector);
@@ -108,8 +137,9 @@ const tags = (function () {
                 }
             }
         });
-        console.log("options.field:",options.field)
+        // console.log("options.field:",options.field)
         appendTagDivs(options.field === 'context' ? 'other' : '', 'unclassified tags', tagDivs, containerDiv);
+        appendTagDivs(options.field === 'Data' ? 'other' : '', 'unclassified tags', tagDivs, containerDiv);
         filterTags(tagCloudDiv);
     }
 
@@ -231,8 +261,8 @@ const tags = (function () {
     }
 
     function appendTagDivs(name, title, tagDivs, element) {
-        console.log("element",element)
-        console.log("name:",name)
+        // console.log("element",element)
+        // console.log("name:",name)
         tagDivs = tagDivs.sort(function (a, b) {
             var nA = parseInt(a.attr('value'));
             var nB = parseInt(b.attr('value'));

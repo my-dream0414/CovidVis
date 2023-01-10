@@ -201,19 +201,19 @@ const page = (function () {
             class: 'clustering_criteria'
         }).appendTo(clusteringControls);
         $('<input>', {
-            id: 'keywords_checkbox',
+            id: 'context_checkbox',
             type: 'checkbox',
             checked: ''
         }).appendTo(checkboxDiv);
         $('<span>', {
-            text: 'keywords'
+            text: 'context'
         }).appendTo(checkboxDiv);
         $('<input>', {
             id: 'author_checkbox',
             type: 'checkbox'
         }).appendTo(checkboxDiv);
         $('<span>', {
-            text: 'authors'
+            text: 'Data'
         }).appendTo(checkboxDiv);
         var createClusteringButton = $('<div>', {
             id: 'create_clustering',

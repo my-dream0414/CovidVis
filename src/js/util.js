@@ -1,7 +1,7 @@
 const bibUtil = (function () {
     return {
         parseField: function (fieldString, field, tagCategories) {
-            console.log("tagCategories:",tagCategories)
+            // console.log("tagCategories:",tagCategories)
             function tagSort(a, b) {
                 var categoryA = a.substring(0, a.indexOf(':')).toLowerCase();
                 var categoryB = b.substring(0, b.indexOf(':')).toLowerCase();
@@ -49,11 +49,11 @@ const bibUtil = (function () {
                             tags.push(tag);
                         }
                     });
-                    $.each(tagCategories, function (categoryName) {
-                        if (fieldString.indexOf(categoryName + ":") == -1) {
-                            tags.push(categoryName + ":?");
-                        }
-                    });
+                    // $.each(tagCategories, function (categoryName) {
+                    //     if (fieldString.indexOf(categoryName + ":") == -1) {
+                    //         tags.push(categoryName + ":?");
+                    //     }
+                    // });
                     tags.sort(tagSort);
                     // console.log(tags)
                     return tags;
@@ -62,15 +62,15 @@ const bibUtil = (function () {
                 case 'Data':
                     var tags = [];
                     const splitter1 = fieldString.indexOf(',') < 0 ? ';' : ',';
-                    // console.log(splitter1)
+                    // console.log("splitter1:",splitter1)
                     $.each(fieldString.split(splitter1), function (i, tag) {
                         // toLowerCase()一个新的字符串，在其中 stringObject 的所有大写字符全部被转换为了小写字符。
                         // trim()函数用于去除字符串两端的空白字符
                         // console.log(fieldString)
                         tag = $.trim(tag.split("//").join("")).toLowerCase();
                         tag1 = tag.split(':')
-                        // console.log(tag1[0])
-                        // console.log(tag1[1])
+                        // console.log(tag1[0])  //key 
+                        // console.log("tag1[1]:",tag1[1])  //value
 
                         if (tag1.length > 1) {
                             tag2 = tag1[1].split('/')
@@ -83,16 +83,14 @@ const bibUtil = (function () {
                             tags.push(tag);
                         }
                     });
-                    $.each(tagCategories, function (categoryName) {
-                        if (fieldString.indexOf(categoryName + ":") == -1) {
-                            tags.push(categoryName + ":?");
-                        }
-                    });
+                    // $.each(tagCategories, function (categoryName) {
+                    //     if (fieldString.indexOf(categoryName + ":") == -1) {
+                    //         tags.push(categoryName + ":?");
+                    //     }
+                    // });
                     tags.sort(tagSort);
-                    // console.log(tags)
                     return tags;
                 case 'Vis_task':
-                    var fieldchar = []
                     return fieldString.split(',')
                 default:
                     return [fieldString];

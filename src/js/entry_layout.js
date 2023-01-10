@@ -54,6 +54,7 @@ const entryLayout = (function () {
                         clustersDiv.empty();
                         var nonDiscardedClusters = [];
                         $.each(bib.clusterAssignment[id], function (i, clusterID) {
+                            console.log(clusterID)
                             var clusteringName = clusterID.substring(0, 1);
                             if (bib.clusters[clusteringName]) {
                                 nonDiscardedClusters.push(clusterID);

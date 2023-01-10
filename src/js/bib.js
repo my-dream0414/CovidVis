@@ -16,6 +16,7 @@ const bib = (function () {
         stopwords: userDefinedStopwords,
         // tagCategories: electron ? generateTagCategoriesFromcontext(entries) : userDefinedTagCategories,
         tagCategories: generateTagCategoriesFromcontext(entries),
+        tagCategoriesData: generateTagCategoriesFromdata(entries),
         authorizedTags: userDefinedAuthorizedTags,
         entryDivs: {},
         warnings: warnings.computeAllWarnings(entries),
@@ -352,11 +353,32 @@ const bib = (function () {
         }
     }
 
+    // context 数据解析
     function generateTagCategoriesFromcontext(entries) {
+        
         const tagCategories = {};
         Object.keys(entries).forEach(id => {
             // forEach()法对数组的每个元素执行一次提供的函数
             bibUtil.parseField(entries[id].context, 'context', tagCategories).forEach(keyword1 => {
+                if (keyword1.indexOf(':') > 0) {
+                    const category = keyword1.split(':')[0];
+                    if (!tagCategories[category]) {
+                        tagCategories[category] = {};
+                    }
+                }
+            });
+        });
+        return tagCategories;
+    }
+
+    // Data 数据解析
+    function generateTagCategoriesFromdata(entries) {
+        // console.log("entries:",entries)
+        const tagCategories = {};
+        Object.keys(entries).forEach(id => {
+            // forEach()法对数组的每个元素执行一次提供的函数
+            // console.log("entries[id]:",entries[id])
+            bibUtil.parseField(entries[id].Data, 'Data', tagCategories).forEach(keyword1 => {
                 if (keyword1.indexOf(':') > 0) {
                     const category = keyword1.split(':')[0];
                     if (!tagCategories[category]) {

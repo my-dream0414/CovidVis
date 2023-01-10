@@ -7,18 +7,23 @@ const clustering = (function() {
 
         createClustering: function () {
             // console.log("bib")
-            // console.log(bib)
+            console.log(bib)
 
             //其实是clustercontext和clusterAuthor 就是看在clustering中 是否keyword和Author被选中 
             var clustercontext = $('#context_checkbox').is(':checked');
             var clusterAuthor = $('#author_checkbox').is(':checked');
                                                     // is() 根据括号里的选择器 是否匹配到 返回布尔值
             //选择框
+            console.log("clustercontext:",clustercontext)
+            console.log("clusterAuthor:",clusterAuthor)
+
             if (!clustercontext && !clusterAuthor) {
                 page.notify('Please select at least one of the clustering criteria checkboxes.', 'error');
                 return;
             }
                                             // filteredEntries的对象的keys的长度 , 最多5个
+            // console.log("this.nClusters:",this.nClusters)
+            // this.nClusters: 聚类的簇数
             this.nClusters = Math.min(Object.keys(bib.filteredEntries).length, this.nClusters);
                                  //传入一个Unicode 变为一个字符  因为一个字符对应一个Unicode
             var clusteringName = String.fromCharCode(65 + clusteringCount);//就是按A、B、C...来作为键
@@ -41,8 +46,8 @@ const clustering = (function() {
                 //这个id是所有的数据条目的名字 如Beck2016Visual 应该是一个一个的对象 id就是对象的"键"
                 docTerms[id] = [];//开始docTerms[id] 是空
                 var terms = [];//让terms为空
-                if (clusterAuthor && bib.parsedEntries[id].author) {
-                    terms = terms.concat(bib.parsedEntries[id].author);
+                if (clusterAuthor && bib.parsedEntries[id].Data) {
+                    terms = terms.concat(bib.parsedEntries[id].Data);
                     //concat连接多个数组
                 }
                 if (clustercontext && bib.parsedEntries[id].context) {
@@ -98,9 +103,11 @@ const clustering = (function() {
                 i++;
             });
 
+            // console.log(this.nClusters, vectors)
             var clusters = window.figue.kmeans(this.nClusters, vectors);
 
             bib.clusters[clusteringName] = {};
+            console.log(clusters)
             $.each(clusters.centroids, function (i, centroid) {
                 var cluster = {};
                 var maxTerms = [];
