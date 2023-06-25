@@ -4,7 +4,7 @@ const entryLayout = (function () {
     var ID = 0;
 
     return {
-
+        //更新列表
         updateEntryList: function () { 
             var nVisibleEntries = Math.min(bib.nVisibleEntries, Object.keys(bib.entries).length);
             var resultBodyDiv = $('#result_body');
